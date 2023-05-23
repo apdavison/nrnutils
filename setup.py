@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
+from nrnutils import __version__
 
 setup(
     name="nrnutils",
-    version="0.1.0",
+    version=__version__,
     py_modules=['nrnutils'],
     author = "Andrew P. Davison",
     author_email = "andrewpdavison@gmail.com",

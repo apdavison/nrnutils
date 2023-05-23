@@ -4,6 +4,7 @@ Wrapper classes to make working with NEURON easier.
 Author: Andrew P. Davison, UNIC, CNRS
 """
 
+__version__ = "0.1.1"
 
 from neuron import nrn, h, hclass
 
@@ -21,10 +22,10 @@ class Mechanism(object):
         self.parameters = parameters
 
     def insert_into(self, section):
-        section.insert(mechanism.name)
+        section.insert(self.name)
         for name, value in self.parameters.items():
             for segment in section:
-                mech = getattr(segment, mechanism.name)
+                mech = getattr(segment, self.name)
                 setattr(mech, name, value)
 
 
