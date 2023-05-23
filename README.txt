@@ -9,11 +9,11 @@ This package contains some Python tools for use with the NEURON simulator
 Installation
 ------------
 
-    $ tar xzf nrnutils-0.2.0
-    $ cd nrnutils-0.2.0
+    $ tar xzf nrnutils-0.3.0
+    $ cd nrnutils-0.3.0
     $ python setup.py install
 
-    
+
 Licence
 -------
 
