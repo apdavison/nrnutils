@@ -13,7 +13,7 @@ setup(
     license = "CeCILL http://www.cecill.info",
     keywords = "computational science neuroscience simulation",
     url = "https://bitbucket.org/apdavison/nrnutils",
-    classifiers = ['Development Status :: 3 - Alpha',
+    classifiers = ['Development Status :: 4 - Beta',
                    'Environment :: Console',
                    'Intended Audience :: Science/Research',
                    'License :: Other/Proprietary License',
@@ -22,4 +22,3 @@ setup(
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering'],
 )
-

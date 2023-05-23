@@ -4,12 +4,14 @@ Wrapper classes to make working with NEURON easier.
 Author: Andrew P. Davison, UNIC, CNRS
 """
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 from neuron import nrn, h, hclass
 
 h.load_file('stdrun.hoc')
 
+PROXIMAL = 0
+DISTAL = 1
 
 class Mechanism(object):
     """
@@ -34,10 +36,10 @@ class Section(nrn.Section):
     Examples:
     >>> soma = Section(L=30, diam=30, mechanisms=[hh, leak])
     >>> apical = Section(L=600, diam=2, nseg=5, mechanisms=[leak],
-    ...                  parent=soma, connect_to=1)
+    ...                  parent=soma, connection_point=DISTAL)
     """
     
-    def __init__(self, L, diam, nseg=1, Ra=100, cm=1, mechanisms=[], parent=None, connect_to=0):
+    def __init__(self, L, diam, nseg=1, Ra=100, cm=1, mechanisms=[], parent=None, connection_point=DISTAL):
         nrn.Section.__init__(self)
         # set geometry
         self.L = L
@@ -48,7 +50,7 @@ class Section(nrn.Section):
         self.cm = cm
         # connect to parent section
         if parent:
-            self.connect(parent, connect_to, 0)
+            self.connect(parent, connection_point, PROXIMAL)
         # add ion channels
         for mechanism in mechanisms:
             mechanism.insert_into(self)
@@ -82,19 +84,22 @@ if __name__ == "__main__":
     
         def __init__(self):
             # define ion channel parameters
-            leak = Mechanism('pas', {'e': -65, 'g': 0.0002})
+            leak = Mechanism('pas', e=-65, g=0.0002)
             hh = Mechanism('hh')
             # create cable sections
             self.soma = Section(L=30, diam=30, mechanisms=[hh])
             self.apical = Section(L=600, diam=2, nseg=5, mechanisms=[leak], parent=self.soma,
-                                  connect_to=1)
-            self.basilar = Section(L=600, diam=2, nseg=5, mechanisms=[leak], parent=self.soma)
-            self.axon = Section(L=1000, diam=1, nseg=37, mechanisms=[hh])
+                                  connection_point=DISTAL)
+            self.basilar = Section(L=600, diam=2, nseg=5, mechanisms=[leak], parent=self.soma,
+                                   connection_point=0.5)
+            self.axon = Section(L=1000, diam=1, nseg=37, mechanisms=[hh],
+                                connection_point=0)
             # synaptic input
-            self.soma.add_synapse('AlphaSynapse', {'onset': 0.5, 'gmax': 0.05, 'e': 0})
+            self.soma.add_synapse('syn', 'AlphaSynapse', onset=0.5, gmax=0.05, e=0)
     
     neuron = SimpleNeuron()
     neuron.soma.plot('v')
+    neuron.apical.plot('v')
     
     h.dt = 0.025
     v_init = -65
